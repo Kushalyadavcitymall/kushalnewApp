@@ -5,15 +5,19 @@ function Taskform({ gettasks }) {
   const [type,settype] = useState("");
   const [info,setinfo]= useState("");
   const [iscompleted,setiscompleted]= useState("");
+  const [assignto,setassignto]=useState("");
+  var today = new Date();
+  const dat = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+  const [date,setdate]=useState(dat);
 
   async function savetask(e) {
     e.preventDefault();
 
     try {
       const taskData = {
-        type:type,info:info,iscompleted:iscompleted
+        type:type,info:info,iscompleted:iscompleted,assignedto:assignto,due_date:date
       };
-       await axios.post("https://kushal2secondtodoapp.herokuapp.com/task/", taskData);
+       await axios.post("http://localhost:5000/task/", taskData);
      // await axios.post("https://mern-auth-template-tutorial.herokuapp.com/customer/",customerData);
       gettasks();
     } catch (err) {
@@ -24,7 +28,7 @@ function Taskform({ gettasks }) {
     e.preventDefault();
 
     try {
-       await axios.delete("https://kushal2secondtodoapp.herokuapp.com/task/");
+       await axios.delete("http://localhost:5000/task/");
      // await axios.post("https://mern-auth-template-tutorial.herokuapp.com/customer/",customerData);
       gettasks();
     } catch (err) {
@@ -38,7 +42,7 @@ function Taskform({ gettasks }) {
         const taskData = {
             iscompleted:"Completed"
           };
-       await axios.put("https://kushal2secondtodoapp.herokuapp.com/task/",taskData);
+       await axios.put("http://localhost:5000/task/",taskData);
      // await axios.post("https://mern-auth-template-tutorial.herokuapp.com/customer/",customerData);
       gettasks();
     } catch (err) {
@@ -74,6 +78,23 @@ function Taskform({ gettasks }) {
           }}
           value={iscompleted}
         />
+        <input
+          type="text"
+          placeholder="Assign to"
+          onChange={(e) => {
+            setassignto(e.target.value);
+          }}
+          value={assignto}
+        />
+        <input
+          type="Date"
+          placeholder="Date"
+          onChange={(e) => {
+            setdate(e.target.value);
+          }}
+          value={date}
+        />
+
 
         <button type="submit">Save new task</button>
       </form>
