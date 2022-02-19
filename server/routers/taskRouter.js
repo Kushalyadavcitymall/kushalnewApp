@@ -6,10 +6,12 @@ router.post("/", auth, async (req, res) => {
   try {
     const type = req.body.type;
     const info = req.body.info;
+    const date=req.body.due_date;
+    const assignedto=req.body.assignedto;
     const iscompleted = req.body.iscompleted;
 
     const newtask = new task({
-      user:req.user,type:type,info:info,iscompleted:iscompleted
+      user:req.user,type:type,info:info,iscompleted:iscompleted,assignedto:assignedto,due_date:date
     });
 
     const savedtask = await newtask.save();
