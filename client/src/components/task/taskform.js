@@ -1,14 +1,17 @@
 import axios from "axios";
 import React, { useState } from "react";
+import {toast} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css'
 
+toast.configure();
 function Taskform({ gettasks }) {
   const [type,settype] = useState("");
   const [info,setinfo]= useState("");
   const [iscompleted,setiscompleted]= useState("");
   const [assignto,setassignto]=useState("");
   var today = new Date();
-  const dat = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
-  const [date,setdate]=useState(dat);
+  var dat = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+  var [date,setdate]=useState(dat);
 
   async function savetask(e) {
     e.preventDefault();
@@ -17,6 +20,14 @@ function Taskform({ gettasks }) {
       const taskData = {
         type:type,info:info,iscompleted:iscompleted,assignedto:assignto,due_date:date
       };
+      date=new Date(date)
+      dat=new Date(dat)
+      if(date.getTime()<dat.getTime()){
+        toast("Please Select Future Date")
+      }
+      if(iscompleted!="Completed" &&iscompleted!="Not Completed"){
+        toast("Please put either Completed or Not Completed in 'Is Completed' column");
+      }
        await axios.post("http://localhost:5000/task/", taskData);
      // await axios.post("https://mern-auth-template-tutorial.herokuapp.com/customer/",customerData);
       gettasks();
